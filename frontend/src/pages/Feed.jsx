@@ -7,6 +7,7 @@ import { AutoAwesomeOutlined } from '@mui/icons-material';
 import Navbar from '../components/Navbar';
 import PostCard from '../components/PostCard';
 import api from '../utils/api';
+import CreatePost from '../components/CreatePost';
 
 const FILTERS = ['All Posts', 'Most Liked', 'Most Commented'];
 const FILTER_KEYS = ['all', 'mostLiked', 'mostCommented'];
@@ -56,6 +57,7 @@ export default function Feed() {
     <Box sx={{ minHeight: '100vh', background: 'background.default' }}>
       <Navbar />
       <Container maxWidth="sm" sx={{ py: 3 }}>
+      <CreatePost onPostCreated={(newPost) => setPosts((prev) => [newPost, ...prev])} />
 
         {/* Filter Tabs */}
         <Box sx={{
