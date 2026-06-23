@@ -3,29 +3,22 @@ import { createTheme } from '@mui/material/styles';
 const theme = createTheme({
   palette: {
     mode: 'dark',
-    primary: {
-      main: '#7C3AED',
-    },
-    secondary: {
-      main: '#06B6D4',
-    },
+    primary: { main: '#7C3AED' },
+    secondary: { main: '#06B6D4' },
     background: {
-      default: '#0F0F13',
-      paper: '#1A1A24',
+      default: '#080810',
+      paper: '#12121E',
     },
     text: {
       primary: '#F1F1F3',
-      secondary: '#9CA3AF',
+      secondary: '#6B7280',
     },
   },
   typography: {
     fontFamily: `'Inter', 'Roboto', sans-serif`,
     h6: { fontWeight: 700 },
-    subtitle2: { color: '#9CA3AF' },
   },
-  shape: {
-    borderRadius: 16,
-  },
+  shape: { borderRadius: 16 },
   components: {
     MuiButton: {
       styleOverrides: {
@@ -39,18 +32,17 @@ const theme = createTheme({
     MuiCard: {
       styleOverrides: {
         root: {
-          background: '#1A1A24',
-          border: '1px solid #2D2D3D',
-          borderRadius: 16,
+          background: '#12121E',
+          border: '1px solid rgba(124,58,237,0.15)',
+          borderRadius: 20,
+          boxShadow: '0 4px 24px rgba(0,0,0,0.4)',
         },
       },
     },
     MuiTextField: {
       styleOverrides: {
         root: {
-          '& .MuiOutlinedInput-root': {
-            borderRadius: 12,
-          },
+          '& .MuiOutlinedInput-root': { borderRadius: 12 },
         },
       },
     },
