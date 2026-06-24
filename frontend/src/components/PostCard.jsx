@@ -50,6 +50,7 @@ export default function PostCard({ post, onUpdate }) {
   const [commentText, setCommentText] = useState('');
   const [submitting, setSubmitting] = useState(false);
   const [likeAnim, setLikeAnim] = useState(false);
+  const [showLikers, setShowLikers] = useState(false);
 
   const isLiked = post.likes?.includes(user?._id);
 
@@ -165,8 +166,9 @@ export default function PostCard({ post, onUpdate }) {
 
         {/* Actions */}
         <Box sx={{ display: 'flex', gap: 2, alignItems: 'center' }}>
-          <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}>
-            <IconButton
+          <Box>
+            <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}>
+              <IconButton
               onClick={handleLike}
               size="small"
               sx={{
@@ -175,14 +177,52 @@ export default function PostCard({ post, onUpdate }) {
                 transition: 'all 0.2s ease',
                 '&:hover': { color: '#EF4444', background: 'rgba(239,68,68,0.1)' },
               }}
-            >
-              {isLiked
-                ? <FavoriteOutlined fontSize="small" />
-                : <FavoriteBorderOutlined fontSize="small" />}
-            </IconButton>
-            <Typography variant="caption" fontWeight={600} color={isLiked ? '#EF4444' : 'text.secondary'}>
-              {post.likes?.length || 0}
-            </Typography>
+              >
+                {isLiked ? <FavoriteOutlined fontSize="small" /> : <FavoriteBorderOutlined fontSize="small" />}
+              </IconButton>
+              <Typography
+              variant="caption"
+              fontWeight={600}
+              color={isLiked ? '#EF4444' : 'text.secondary'}
+              onClick={() => post.likedUsernames?.length > 0 && setShowLikers(!showLikers)}
+              sx={{ cursor: post.likedUsernames?.length > 0 ? 'pointer' : 'default' }}
+              >
+                {post.likes?.length || 0}
+              </Typography>
+            </Box>
+
+            {/* Likers Dropdown */}
+            <Collapse in={showLikers && post.likedUsernames?.length > 0}>
+              <Box sx={{
+                mt: 1, p: 1.5,
+                background: 'rgba(239,68,68,0.06)',
+                border: '1px solid rgba(239,68,68,0.15)',
+                borderRadius: '12px',
+                maxWidth: 220,
+              }}>
+                <Typography variant="caption" fontWeight={700} sx={{ color: '#EF4444', display: 'block', mb: 1 }}>
+                  ❤️ Liked by
+                </Typography>
+                {post.likedUsernames?.slice(0, 5).map((name, i) => (
+                <Box key={i} sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 0.5 }}>
+                  <Avatar sx={{
+                    width: 20, height: 20,
+                    bgcolor: 'rgba(239,68,68,0.2)',
+                    color: '#EF4444',
+                    fontSize: 10, fontWeight: 800,
+                  }}>
+                    {name?.[0]?.toUpperCase()}
+                    </Avatar>
+                    <Typography variant="caption" color="#D1D5DB" fontWeight={500}>{name}</Typography>
+                    </Box>
+                  ))}
+                  {post.likedUsernames?.length > 5 && (
+                  <Typography variant="caption" sx={{ color: '#6B7280', mt: 0.5, display: 'block' }}>
+                    +{post.likedUsernames.length - 5} more
+                  </Typography>
+                )}
+                </Box>
+            </Collapse>
           </Box>
 
           <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}>
