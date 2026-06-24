@@ -9,6 +9,7 @@ import PostCard from '../components/PostCard';
 import CreatePost from '../components/CreatePost';
 import LeftSidebar from '../components/LeftSidebar';
 import RightSidebar from '../components/RightSidebar';
+import BottomNav from '../components/BottomNav';
 import api from '../utils/api';
 
 const FILTERS = ['All Posts', 'Most Liked', 'Most Commented'];
@@ -59,43 +60,45 @@ export default function Feed() {
         radial-gradient(ellipse at 15% 15%, rgba(124,58,237,0.07) 0%, transparent 50%),
         radial-gradient(ellipse at 85% 85%, rgba(6,182,212,0.05) 0%, transparent 50%)
       `,
+      pb: { xs: 10, lg: 3 },
     }}>
       <Navbar />
 
-      <Container maxWidth="xl" sx={{ py: 3, px: { xs: 2, sm: 3 } }}>
+      <Container maxWidth="xl" sx={{ py: 3, px: { xs: 1.5, sm: 3 } }}>
         <Box sx={{ display: 'flex', gap: 3, justifyContent: 'center' }}>
 
-          {/* Left Sidebar */}
+          {/* Left Sidebar — hidden on mobile/tablet */}
           <LeftSidebar />
 
           {/* Center Feed */}
-          <Box sx={{ flex: 1, maxWidth: 600, minWidth: 0 }}>
+          <Box sx={{ flex: 1, maxWidth: 600, minWidth: 0, width: '100%' }}>
 
             {/* Hero Banner */}
             <Box sx={{
-              mb: 2.5, p: 2.5, borderRadius: '20px',
+              mb: 2.5, p: { xs: 2, sm: 2.5 }, borderRadius: '20px',
               background: 'linear-gradient(135deg, rgba(124,58,237,0.12), rgba(6,182,212,0.06))',
               border: '1px solid rgba(124,58,237,0.2)',
               backdropFilter: 'blur(10px)',
               display: 'flex', alignItems: 'center', gap: 2,
             }}>
               <Box sx={{
-                width: 44, height: 44, borderRadius: '14px', flexShrink: 0,
+                width: { xs: 38, sm: 44 }, height: { xs: 38, sm: 44 },
+                borderRadius: '14px', flexShrink: 0,
                 background: 'linear-gradient(135deg, #7C3AED, #06B6D4)',
                 display: 'flex', alignItems: 'center', justifyContent: 'center',
                 boxShadow: '0 0 20px rgba(124,58,237,0.4)',
               }}>
-                <WhatshotOutlined sx={{ color: '#fff', fontSize: 24 }} />
+                <WhatshotOutlined sx={{ color: '#fff', fontSize: { xs: 20, sm: 24 } }} />
               </Box>
               <Box>
-                <Typography fontWeight={800} fontSize={16} sx={{
+                <Typography fontWeight={800} fontSize={{ xs: 14, sm: 16 }} sx={{
                   background: 'linear-gradient(90deg, #A78BFA, #06B6D4)',
                   WebkitBackgroundClip: 'text',
                   WebkitTextFillColor: 'transparent',
                 }}>
                   Welcome to PulseBoard
                 </Typography>
-                <Typography variant="caption" color="#6B7280">
+                <Typography variant="caption" color="#6B7280" sx={{ fontSize: { xs: 11, sm: 12 } }}>
                   Share your thoughts, ideas and moments ✨
                 </Typography>
               </Box>
@@ -128,7 +131,15 @@ export default function Feed() {
                 }}
               >
                 {FILTERS.map((f) => (
-                  <Tab key={f} label={f} sx={{ fontSize: 13, textTransform: 'none', py: 1.5 }} />
+                  <Tab
+                    key={f} label={f}
+                    sx={{
+                      fontSize: { xs: 11, sm: 13 },
+                      textTransform: 'none',
+                      py: 1.5,
+                      minWidth: 0,
+                    }}
+                  />
                 ))}
               </Tabs>
             </Box>
@@ -147,14 +158,17 @@ export default function Feed() {
               }}>
                 <AutoAwesomeOutlined sx={{ fontSize: 52, color: 'primary.main', mb: 1.5, opacity: 0.7 }} />
                 <Typography fontWeight={700} color="text.primary" mb={0.5}>No posts yet</Typography>
-                <Typography variant="body2" color="text.secondary">Be the first to post something amazing!</Typography>
+                <Typography variant="body2" color="text.secondary">
+                  Be the first to post something amazing!
+                </Typography>
               </Box>
             ) : (
               <>
                 {posts.map((post) => (
                   <PostCard key={post._id} post={post} onUpdate={handlePostUpdate} />
                 ))}
-                {/* Pagination Footer — always visible */}
+
+                {/* Pagination Footer */}
                 <Box sx={{
                   mt: 3, p: 2.5,
                   background: 'rgba(18,18,35,0.7)',
@@ -166,14 +180,12 @@ export default function Feed() {
                   alignItems: 'center',
                   gap: 1.5,
                 }}>
-                  {/* Page indicator */}
+                  {/* Page dots */}
                   <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-                    {Array.from({ length: totalPages }, (_, i) => i + 1).map((p) => (
+                    {Array.from({ length: totalPages || 1 }, (_, i) => i + 1).map((p) => (
                       <Box
                         key={p}
-                        onClick={() => {
-                          if (p !== page) fetchPosts(p, filter, true);
-                        }}
+                        onClick={() => { if (p !== page) fetchPosts(p, filter, true); }}
                         sx={{
                           width: p === page ? 28 : 10,
                           height: 10,
@@ -191,16 +203,15 @@ export default function Feed() {
 
                   {/* Page text */}
                   <Typography variant="caption" sx={{ color: '#6B7280' }}>
-                    Page <Box component="span" sx={{ color: '#A78BFA', fontWeight: 700 }}>{page}</Box>
+                    Page{' '}
+                    <Box component="span" sx={{ color: '#A78BFA', fontWeight: 700 }}>{page}</Box>
                     {' '}of{' '}
                     <Box component="span" sx={{ color: '#A78BFA', fontWeight: 700 }}>{totalPages || 1}</Box>
                     {' · '}
-                    <Box component="span" sx={{ color: '#6B7280' }}>
-                      {posts.length} posts loaded
-                    </Box>
+                    <Box component="span" sx={{ color: '#6B7280' }}>{posts.length} posts loaded</Box>
                   </Typography>
 
-                  {/* Load More button */}
+                  {/* Load More */}
                   {page < totalPages && (
                     <Button
                       variant="outlined"
@@ -209,14 +220,9 @@ export default function Feed() {
                       fullWidth
                       sx={{
                         borderColor: 'rgba(124,58,237,0.3)',
-                        color: '#A78BFA',
-                        borderRadius: '12px',
-                        fontWeight: 700,
-                        py: 1,
-                        '&:hover': {
-                          borderColor: '#7C3AED',
-                          background: 'rgba(124,58,237,0.08)',
-                        },
+                        color: '#A78BFA', borderRadius: '12px',
+                        fontWeight: 700, py: 1,
+                        '&:hover': { borderColor: '#7C3AED', background: 'rgba(124,58,237,0.08)' },
                         '&:disabled': { opacity: 0.4 },
                       }}
                     >
@@ -230,10 +236,7 @@ export default function Feed() {
                   )}
 
                   {page >= totalPages && posts.length > 0 && (
-                    <Typography variant="caption" sx={{
-                      color: '#374151',
-                      display: 'flex', alignItems: 'center', gap: 0.5,
-                    }}>
+                    <Typography variant="caption" sx={{ color: '#374151' }}>
                       ✨ You're all caught up!
                     </Typography>
                   )}
@@ -242,10 +245,13 @@ export default function Feed() {
             )}
           </Box>
 
-          {/* Right Sidebar */}
+          {/* Right Sidebar — hidden on mobile/tablet */}
           <RightSidebar />
         </Box>
       </Container>
+
+      {/* Mobile Bottom Nav */}
+      <BottomNav active={0} />
     </Box>
   );
 }

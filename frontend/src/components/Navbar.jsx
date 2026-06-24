@@ -14,29 +14,33 @@ export default function Navbar() {
 
   return (
     <AppBar position="sticky" elevation={0} sx={{
-      background: 'rgba(8,8,16,0.9)',
+      background: 'rgba(8,8,16,0.92)',
       backdropFilter: 'blur(20px)',
       borderBottom: '1px solid rgba(124,58,237,0.2)',
-      boxShadow: '0 0 40px rgba(124,58,237,0.08)',
+      boxShadow: '0 0 40px rgba(124,58,237,0.06)',
     }}>
-      <Toolbar sx={{ justifyContent: 'space-between', px: { xs: 2, sm: 4 } }}>
-
+      <Toolbar sx={{
+        justifyContent: 'space-between',
+        px: { xs: 2, sm: 4 },
+        minHeight: { xs: 56, sm: 64 },
+      }}>
         {/* Logo */}
         <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
           <Box sx={{
             display: 'flex', alignItems: 'center', justifyContent: 'center',
-            width: 36, height: 36, borderRadius: '10px',
+            width: { xs: 30, sm: 36 }, height: { xs: 30, sm: 36 },
+            borderRadius: '10px',
             background: 'linear-gradient(135deg, #7C3AED, #06B6D4)',
             boxShadow: '0 0 16px rgba(124,58,237,0.5)',
           }}>
-            <BoltOutlined sx={{ color: '#fff', fontSize: 20 }} />
+            <BoltOutlined sx={{ color: '#fff', fontSize: { xs: 17, sm: 20 } }} />
           </Box>
           <Typography variant="h6" sx={{
             background: 'linear-gradient(90deg, #A78BFA, #06B6D4)',
             WebkitBackgroundClip: 'text',
             WebkitTextFillColor: 'transparent',
             fontWeight: 800,
-            fontSize: 22,
+            fontSize: { xs: 18, sm: 22 },
             letterSpacing: '-0.5px',
           }}>
             PulseBoard
@@ -54,15 +58,15 @@ export default function Navbar() {
             </Typography>
           </Box>
           <Box sx={{
-            p: '2px',
-            borderRadius: '50%',
+            p: '2px', borderRadius: '50%',
             background: 'linear-gradient(135deg, #7C3AED, #06B6D4)',
           }}>
             <Avatar sx={{
-              width: 36, height: 36,
+              width: { xs: 30, sm: 36 },
+              height: { xs: 30, sm: 36 },
               bgcolor: '#12121E',
               fontWeight: 800,
-              fontSize: 15,
+              fontSize: { xs: 13, sm: 15 },
               color: '#A78BFA',
             }}>
               {user?.name?.[0]?.toUpperCase()}
