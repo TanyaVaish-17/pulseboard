@@ -154,22 +154,90 @@ export default function Feed() {
                 {posts.map((post) => (
                   <PostCard key={post._id} post={post} onUpdate={handlePostUpdate} />
                 ))}
-                {page < totalPages && (
-                  <Box sx={{ textAlign: 'center', mt: 3 }}>
+                {/* Pagination Footer — always visible */}
+                <Box sx={{
+                  mt: 3, p: 2.5,
+                  background: 'rgba(18,18,35,0.7)',
+                  border: '1px solid rgba(124,58,237,0.2)',
+                  borderRadius: '16px',
+                  backdropFilter: 'blur(10px)',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  alignItems: 'center',
+                  gap: 1.5,
+                }}>
+                  {/* Page indicator */}
+                  <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                    {Array.from({ length: totalPages }, (_, i) => i + 1).map((p) => (
+                      <Box
+                        key={p}
+                        onClick={() => {
+                          if (p !== page) fetchPosts(p, filter, true);
+                        }}
+                        sx={{
+                          width: p === page ? 28 : 10,
+                          height: 10,
+                          borderRadius: '5px',
+                          cursor: p === page ? 'default' : 'pointer',
+                          background: p === page
+                            ? 'linear-gradient(90deg, #7C3AED, #06B6D4)'
+                            : 'rgba(124,58,237,0.2)',
+                          transition: 'all 0.3s ease',
+                          '&:hover': p !== page ? { background: 'rgba(124,58,237,0.4)' } : {},
+                        }}
+                      />
+                    ))}
+                  </Box>
+
+                  {/* Page text */}
+                  <Typography variant="caption" sx={{ color: '#6B7280' }}>
+                    Page <Box component="span" sx={{ color: '#A78BFA', fontWeight: 700 }}>{page}</Box>
+                    {' '}of{' '}
+                    <Box component="span" sx={{ color: '#A78BFA', fontWeight: 700 }}>{totalPages || 1}</Box>
+                    {' · '}
+                    <Box component="span" sx={{ color: '#6B7280' }}>
+                      {posts.length} posts loaded
+                    </Box>
+                  </Typography>
+
+                  {/* Load More button */}
+                  {page < totalPages && (
                     <Button
                       variant="outlined"
                       onClick={() => fetchPosts(page + 1, filter, false)}
                       disabled={loadingMore}
+                      fullWidth
                       sx={{
-                        borderColor: 'rgba(124,58,237,0.4)',
-                        color: '#A78BFA', borderRadius: '12px', px: 4,
-                        '&:hover': { borderColor: '#7C3AED', background: 'rgba(124,58,237,0.08)' },
+                        borderColor: 'rgba(124,58,237,0.3)',
+                        color: '#A78BFA',
+                        borderRadius: '12px',
+                        fontWeight: 700,
+                        py: 1,
+                        '&:hover': {
+                          borderColor: '#7C3AED',
+                          background: 'rgba(124,58,237,0.08)',
+                        },
+                        '&:disabled': { opacity: 0.4 },
                       }}
                     >
-                      {loadingMore ? 'Loading...' : 'Load More'}
+                      {loadingMore ? (
+                        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                          <CircularProgress size={14} sx={{ color: '#A78BFA' }} />
+                          Loading more...
+                        </Box>
+                      ) : `Load More (Page ${page + 1})`}
                     </Button>
-                  </Box>
-                )}
+                  )}
+
+                  {page >= totalPages && posts.length > 0 && (
+                    <Typography variant="caption" sx={{
+                      color: '#374151',
+                      display: 'flex', alignItems: 'center', gap: 0.5,
+                    }}>
+                      ✨ You're all caught up!
+                    </Typography>
+                  )}
+                </Box>
               </>
             )}
           </Box>

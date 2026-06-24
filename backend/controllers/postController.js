@@ -34,17 +34,29 @@ const getPosts = async (req, res) => {
     const skip = (page - 1) * limit;
 
     let sortOption = { createdAt: -1 };
-    if (filter === 'mostLiked') sortOption = { 'likes': -1 };
-    if (filter === 'mostCommented') sortOption = { 'comments': -1 };
+    if (filter === 'mostLiked') sortOption = { likesCount: -1 };
+    if (filter === 'mostCommented') sortOption = { commentsCount: -1 };
 
-    const posts = await Post.find()
-      .sort(sortOption)
-      .skip(skip)
-      .limit(Number(limit));
+    const posts = await Post.aggregate([
+      {
+        $addFields: {
+          likesCount: { $size: '$likes' },
+          commentsCount: { $size: '$comments' },
+        }
+      },
+      { $sort: sortOption },
+      { $skip: skip },
+      { $limit: Number(limit) },
+    ]);
 
     const total = await Post.countDocuments();
 
-    res.json({ posts, total, page: Number(page), pages: Math.ceil(total / limit) });
+    res.json({
+      posts,
+      total,
+      page: Number(page),
+      pages: Math.ceil(total / limit),
+    });
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
