@@ -111,4 +111,20 @@ const commentPost = async (req, res) => {
   }
 };
 
-module.exports = { createPost, getPosts, likePost, commentPost };
+// @DELETE /api/posts/:id — delete post
+const deletePost = async (req, res) => {
+  try {
+    const post = await Post.findById(req.params.id);
+    if (!post) return res.status(404).json({ message: 'Post not found' });
+
+    if (post.user.toString() !== req.user.id)
+      return res.status(401).json({ message: 'Not authorized' });
+
+    await Post.findByIdAndDelete(req.params.id);
+    res.json({ message: 'Post deleted' });
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+};
+
+module.exports = { createPost, getPosts, likePost, commentPost, deletePost };

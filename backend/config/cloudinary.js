@@ -13,6 +13,7 @@ const storage = new CloudinaryStorage({
   params: {
     folder: 'pulseboard',
     allowed_formats: ['jpg', 'jpeg', 'png', 'webp'],
+    transformation: [{ flags: 'attachment' }],
   },
 });
 

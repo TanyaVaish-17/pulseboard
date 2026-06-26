@@ -165,7 +165,12 @@ export default function Feed() {
             ) : (
               <>
                 {posts.map((post) => (
-                  <PostCard key={post._id} post={post} onUpdate={handlePostUpdate} />
+                <PostCard
+                  key={post._id}
+                  post={post}
+                  onUpdate={handlePostUpdate}
+                  onDelete={(id) => setPosts((prev) => prev.filter((p) => p._id !== id))}
+                />
                 ))}
 
                 {/* Pagination Footer */}

@@ -128,7 +128,15 @@ export default function CreatePost({ onPostCreated }) {
               <img
                 src={preview}
                 alt="preview"
-                style={{ width: '100%', maxHeight: 280, objectFit: 'cover', display: 'block' }}
+                style={{
+                  width: '100%',
+                  height: 'auto',
+                  maxHeight: '320px',
+                  objectFit: 'cover',
+                  objectPosition: 'center top',
+                  display: 'block',
+                  borderRadius: '12px',
+                }}
               />
             </Box>
             <IconButton

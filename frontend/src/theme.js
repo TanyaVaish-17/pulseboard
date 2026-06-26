@@ -36,6 +36,7 @@ const theme = createTheme({
           border: '1px solid rgba(124,58,237,0.15)',
           borderRadius: 20,
           boxShadow: '0 4px 24px rgba(0,0,0,0.4)',
+          overflow: 'visible',
         },
       },
     },
